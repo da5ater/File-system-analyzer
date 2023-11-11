@@ -4,6 +4,19 @@ import humanize
 from pathlib import Path as p
 
 
+# extract the info of the files in the path given recursivly
+# (in  -> content(string), path(string))   (out  -> file_info(list))
+def extract_info(content,path):
+    for entry in content:
+        entry_path = os.path.join(path ,entry)
+        if os.path.isfile(entry_path):
+            print(entry_path)
+            file_info = os.stat(entry_path)            
+            return file_info.st_size    
+        else :
+            file_info = scan(entry_path)
+
+
 
 # a function to scan a given path recursively 
 # TAKES A PATH AND RETURN INFORMATION
@@ -35,16 +48,20 @@ def scan(path):
         print("eror : '{e}")
     except PermissionError as e :
         print("erorr : '{e}")
+    
+
+    print(extract_info(content,path))
 
 
-    print(content)
+scan(r'G:\softwares')
+   
+        
 
-scan("G:\Mohamed\هجرة")
+
 
      
 
 
 
     
-        
     
