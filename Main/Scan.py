@@ -1,10 +1,29 @@
 import os
 from datetime import datetime 
 
+# git a list of all the directories in the guven path
+# parameters  ->( Path - string - )
+# output      ->( a List in a vraiable named content )
+def git_content_from_path(path):
+      
+      try :
+        # getting a list of all the directories
+        content =  os.listdir(path)
+        return content
+      except FileNotFoundError as e :
+        raise FileNotFoundError(f"'{e}'")
+        
+      except PermissionError as e :
+        raise PermissionError(f"'{e}'")
+
+      
 
 
 
-# extract the info of the files in the path given recursivly
+
+
+# extract the info of the files from the get content function.
+# scan  the path given recursivly
 # (in  -> content(string), path(string))   (out  -> file_info(list))
 def extract_info(content,path):
 
@@ -12,6 +31,8 @@ def extract_info(content,path):
     entries_info = {}
     try:
         for entry in content:
+
+         
 
             entry_path = os.path.join(path ,entry)
 
@@ -55,50 +76,50 @@ def extract_info(content,path):
                     
             else :
                 file_info = scan(entry_path)
+  
                 
     except PermissionError as e:
         print("permission erorr : '{e}")                
 
-    for x in entries_info:
-        print(x)
+    return entries_info
+
+# take the path as a parameter and handels all the expected erorrs
+def handel_erorr(path):
+        # CHECK if path is empty or not a string
+    if not path or not isinstance(path,str):
+        raise ValueError(f"please Provide a valid Path")
+
+    try :
+    # validate pass existance
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"path dose not exist")
+    except PermissionError as e:
+        raise PermissionError(f"Permission eror accessing '{path}' : '{e}' ")
+    
+    try :
+    # CHECK IF PATH IS NOT A DIRECTORY
+        if not os.path.isdir(path):
+            raise NotADirectoryError(f"THE PROVIDED PATH '{path}'IS NOT A DIRECTORY")    
+    except PermissionError as e:
+        raise PermissionError(f"PROVIDED PATH  '{path}' IS NOT A DIRECTORY : '{e}' ")
+
+
+
 
 # a function to scan a given path recursively 
 # TAKES A PATH AND RETURN INFORMATION
 # [ input is path and it is -> string ]   [ out  ??] 
 def scan(path):
-    
-    # CHECK if path is empty or not a string
-    if not path or not isinstance(path,str):
-        raise ValueError("please Provide a valid Path")
+    # FIRST we handel all the edge cases
+    handel_erorr(path)    
+    # then we extract the list fo content
+    content = git_content_from_path(path)
 
-    try :
-    # validate pass existance
-        if not os.path.exists(path):
-            raise FileNotFoundError("path dose not exist")
-    except PermissionError as e:
-        raise PermissionError("Permission eror accessing '{path}' : '{e}' ")
-    
-    try :
-    # CHECK IF PATH IS NOT A DIRECTORY
-        if not os.path.isdir(path):
-            raise NotADirectoryError("THE PROVIDED PATH '{PATH}'IS NOT A DIRECTORY")    
-    except PermissionError as e:
-        raise PermissionError("PROVIDED PATH  '{path}' IS NOT A DIRECTORY : '{e}' ")
-    
- 
-    content = os.listdir(path)
-
-
-    try :
-    # getting a list of all the directories
-        content = os.listdir(path)
-    except FileNotFoundError as e :
-        print("eror : '{e}")
-    except PermissionError as e :
-        print("erorr : '{e}")
-    
-
-    extract_info(content,path)
+    if content:
+        # THIRD we retrive all the needed information about that list
+        entries_info = extract_info(content, path)
+        for x in entries_info:
+            print(x)
 
 
 scan(r"G:\\")
