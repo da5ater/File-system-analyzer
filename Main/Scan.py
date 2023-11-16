@@ -14,6 +14,7 @@ def git_content_from_path(path):
         raise FileNotFoundError(f"'{e}'")
         
       except PermissionError as e :
+        return []
         raise PermissionError(f"'{e}'")
 
       
@@ -79,7 +80,8 @@ def extract_info(content,path):
   
                 
     except PermissionError as e:
-        print("permission erorr : '{e}")                
+        raise PermissionError(f"permission erorr : '{e}'")
+                        
 
     return entries_info
 
