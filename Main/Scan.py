@@ -15,7 +15,7 @@ def git_content_from_path(path):
         
       except PermissionError as e :
         return []
-        raise PermissionError(f"'{e}'")
+        
 
       
 
@@ -53,14 +53,14 @@ def extract_info(content,path):
 
                 # time information
                 file_creation_time = file_info.st_ctime
-                file_modefication_time = file_info.st_mtime
+                file_modification_time = file_info.st_mtime
                 # time in a human-readable way
                 creation_time = datetime.fromtimestamp(file_creation_time).strftime('%Y-%m-%d %H:%M:%S')
                 # adding it up in the list
                 array_of_information.append(creation_time)
-                modefication_time = datetime.fromtimestamp(file_modefication_time).strftime('%Y-%m-%d %H:%M:%S')
+                modification_time = datetime.fromtimestamp(file_modification_time).strftime('%Y-%m-%d %H:%M:%S')
                 # adding it up in the list
-                array_of_information.append(modefication_time)
+                array_of_information.append(modification_time)
 
                 # admenestrative information
                 file_owner = file_info.st_uid
@@ -76,7 +76,7 @@ def extract_info(content,path):
                 del(array_of_information)
                     
             else :
-                file_info = scan(entry_path)
+                 scan(entry_path)
   
                 
     except PermissionError as e:
@@ -86,7 +86,7 @@ def extract_info(content,path):
     return entries_info
 
 # take the path as a parameter and handels all the expected erorrs
-def handel_erorr(path):
+def handel_error(path):
         # CHECK if path is empty or not a string
     if not path or not isinstance(path,str):
         raise ValueError(f"please Provide a valid Path")
@@ -113,15 +113,17 @@ def handel_erorr(path):
 # [ input is path and it is -> string ]   [ out  ??] 
 def scan(path):
     # FIRST we handel all the edge cases
-    handel_erorr(path)    
+    handel_error(path)    
     # then we extract the list fo content
     content = git_content_from_path(path)
 
     if content:
         # THIRD we retrive all the needed information about that list
         entries_info = extract_info(content, path)
-        for x in entries_info:
-            print(x)
+        # for x in entries_info:
+        #     print(x)
+
+        return entries_info
 
 
 scan(r"G:\\")
