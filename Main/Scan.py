@@ -44,6 +44,10 @@ def extract_info(content,path):
                 
                 file_info = os.stat(entry_path) 
 
+                # file type
+                name, extension = os.path.splitext(entry_path)
+                array_of_information.append(extension)
+
                 # size information
                 file_size = file_info.st_size
                 # size in a human_readable way
@@ -62,13 +66,13 @@ def extract_info(content,path):
                 # adding it up in the list
                 array_of_information.append(modification_time)
 
-                # admenestrative information
-                file_owner = file_info.st_uid
-                # adding it up in the list
-                array_of_information.append(file_owner)
-                file_permission = file_info.st_mode
-                # adding it up in the list
-                array_of_information.append(file_permission)
+                # # admenestrative information
+                # file_owner = file_info.st_uid
+                # # adding it up in the list
+                # array_of_information.append(file_owner)
+                # file_permission = file_info.st_mode
+                # # adding it up in the list
+                # array_of_information.append(file_permission)
 
                 # assign the file with the array of information
                 entries_info[entry] = array_of_information
@@ -121,12 +125,12 @@ def scan(path):
         # THIRD we retrive all the needed information about that list
         entries_info = extract_info(content, path)
         # for x in entries_info:
-        #     print(x)
+        print(entries_info)
 
         return entries_info
 
 
-scan(r"G:\\")
+scan(r"G:\Mohamed\هجرة")
    
         
 
