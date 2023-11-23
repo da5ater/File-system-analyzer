@@ -18,40 +18,27 @@ def git_content_from_path(path):
         
 
       
+def extract_info(content, path, entries_info=None):
+    if entries_info is None:
+        entries_info = {}
 
-
-
-
-
-# extract the info of the files from the get content function.
-# scan  the path given recursivly
-# (in  -> content(string), path(string))   (out  -> file_info(list))
-def extract_info(content,path):
-
-    # a dictionary contain a key wich is the file (string), and a value wich is all the informatio in a readable way (list) 
-    entries_info = {}
     try:
         for entry in content:
-
-         
-
-            entry_path = os.path.join(path ,entry)
+            entry_path = os.path.join(path, entry)
 
             if os.path.isfile(entry_path):
-                # a list containes all the information about the file
-                array_of_information=[]    
+                array_of_information = []
 
-                
-                file_info = os.stat(entry_path) 
+                file_info = os.stat(entry_path)
 
                 # file type
-                name, extension = os.path.splitext(entry_path)
+                extension = os.path.splitext(entry_path)
                 array_of_information.append(extension)
 
                 # size information
                 file_size = file_info.st_size
-                # size in a human_readable way
-                size =  str(file_size / 1024 )+ ' KB'
+                # size in a human-readable way
+                size = str(file_size / 1024) + ' KB'
                 # adding it up in the list
                 array_of_information.append(size)
 
@@ -66,28 +53,21 @@ def extract_info(content,path):
                 # adding it up in the list
                 array_of_information.append(modification_time)
 
-                # # admenestrative information
-                # file_owner = file_info.st_uid
-                # # adding it up in the list
-                # array_of_information.append(file_owner)
-                # file_permission = file_info.st_mode
-                # # adding it up in the list
-                # array_of_information.append(file_permission)
+                # Check for None values in the list before adding to the dictionary
+                if None not in array_of_information:
+                    entries_info[entry] = array_of_information
 
-                # assign the file with the array of information
-                entries_info[entry] = array_of_information
+            else:
+                # Call the scan function with the correct parameters
+                result = scan(entry_path)
+                if result is not None:
+                    entries_info.update(result)
 
-                del(array_of_information)
-                    
-            else :
-                 scan(entry_path)
-  
-                
     except PermissionError as e:
-        raise PermissionError(f"permission erorr : '{e}'")
-                        
+        print("Permission error:", e)
 
     return entries_info
+
 
 # take the path as a parameter and handels all the expected erorrs
 def handel_error(path):
@@ -125,12 +105,12 @@ def scan(path):
         # THIRD we retrive all the needed information about that list
         entries_info = extract_info(content, path)
         # for x in entries_info:
-        print(entries_info)
+        # print(entries_info)
 
         return entries_info
 
 
-scan(r"G:\Mohamed\هجرة")
+# scan(r"G:\Mohamed\كلية\tasks")
    
         
 
